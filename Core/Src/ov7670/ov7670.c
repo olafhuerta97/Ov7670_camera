@@ -14,7 +14,9 @@
 
 
 
-
+uint32_t h_events = 0;
+uint32_t v_events = 0;
+uint32_t f_events = 0;
 
 /*** Internal Const Values, Macros ***/
 
@@ -85,7 +87,7 @@ RET ov7670_startCap(uint32_t capMode, uint32_t destAddress)
   if (capMode == OV7670_CAP_CONTINUOUS) {
     /* note: continuous mode automatically invokes DCMI, but DMA needs to be invoked manually */
     s_destAddressForContiuousMode = destAddress;
-    HAL_DCMI_Start_DMA(sp_hdcmi, DCMI_MODE_CONTINUOUS, destAddress, OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT/2);
+    HAL_DCMI_Start_DMA(sp_hdcmi, DCMI_MODE_CONTINUOUS, destAddress, OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT / 2);
   } else if (capMode == OV7670_CAP_SINGLE_FRAME) {
     s_destAddressForContiuousMode = 0;
     HAL_DCMI_Start_DMA(sp_hdcmi, DCMI_MODE_SNAPSHOT, destAddress, OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT / 2);
@@ -109,10 +111,14 @@ void ov7670_registerCallback(void (*cbHsync)(uint32_t h), void (*cbVsync)(uint32
 
 void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef *hdcmi)
 {
+	f_events++;
+    if (f_events == 1){
+		HAL_DCMI_Stop(sp_hdcmi);
+	}
 //  printf("FRAME %d\n", HAL_GetTick());
   if(s_cbVsync)s_cbVsync(s_currentV);
   if(s_destAddressForContiuousMode != 0) {
-    HAL_DMA_Start_IT(hdcmi->DMA_Handle, (uint32_t)&hdcmi->Instance->DR, s_destAddressForContiuousMode, OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT/2);
+    HAL_DMA_Start_IT(hdcmi->DMA_Handle, (uint32_t)&hdcmi->Instance->DR, s_destAddressForContiuousMode, OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT /2);
   }
   s_currentV++;
   s_currentH = 0;
@@ -120,16 +126,19 @@ void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef *hdcmi)
 
 void HAL_DCMI_VsyncEventCallback(DCMI_HandleTypeDef *hdcmi)
 {
+	v_events++;
 //  printf("VSYNC %d\n", HAL_GetTick());
 //  HAL_DMA_Start_IT(hdcmi->DMA_Handle, (uint32_t)&hdcmi->Instance->DR, s_destAddressForContiuousMode, OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT/2);
 }
 
-//void HAL_DCMI_LineEventCallback(DCMI_HandleTypeDef *hdcmi)
-//{
+void HAL_DCMI_LineEventCallback(DCMI_HandleTypeDef *hdcmi)
+{
+	h_events++;
+
 ////  printf("HSYNC %d\n", HAL_GetTick());
-//  if(s_cbHsync)s_cbHsync(s_currentH);
-//  s_currentH++;
-//}
+  if(s_cbHsync)s_cbHsync(s_currentH);
+  s_currentH++;
+}
 
 /*** Internal Function Defines ***/
 static RET ov7670_write(uint8_t regAddr, uint8_t data)

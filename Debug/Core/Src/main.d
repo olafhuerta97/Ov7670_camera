@@ -37,7 +37,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Core/Inc/dcmi.h ../Core/Inc/main.h ../Core/Inc/dma.h \
  ../Core/Inc/eth.h ../Core/Inc/i2c.h ../Core/Inc/tim.h \
  ../Core/Inc/usart.h ../Core/Inc/usb_otg.h ../Core/Inc/gpio.h \
- /Users/olafhuerta/STM32CubeIDE/workspace_1.9.0/Ov7670_camera/Core/Src/ov7670/ov7670.h
+ C:/Users/Olaf/STM32CubeIDE/workspace_1.9.0/Ov7670_camera/Core/Src/ov7670/ov7670.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:
 ../Core/Inc/stm32f7xx_hal_conf.h:
@@ -83,4 +83,4 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/usart.h:
 ../Core/Inc/usb_otg.h:
 ../Core/Inc/gpio.h:
-/Users/olafhuerta/STM32CubeIDE/workspace_1.9.0/Ov7670_camera/Core/Src/ov7670/ov7670.h:
+C:/Users/Olaf/STM32CubeIDE/workspace_1.9.0/Ov7670_camera/Core/Src/ov7670/ov7670.h:

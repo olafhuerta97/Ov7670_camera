@@ -61,8 +61,8 @@ all: main-build
 main-build: Ov7670_camera.elf secondary-outputs
 
 # Tool invocations
-Ov7670_camera.elf Ov7670_camera.map: $(OBJS) $(USER_OBJS) /Users/olafhuerta/STM32CubeIDE/workspace_1.9.0/Ov7670_camera/STM32F767ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Ov7670_camera.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"/Users/olafhuerta/STM32CubeIDE/workspace_1.9.0/Ov7670_camera/STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Ov7670_camera.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Ov7670_camera.elf Ov7670_camera.map: $(OBJS) $(USER_OBJS) C:\Users\Olaf\STM32CubeIDE\workspace_1.9.0\Ov7670_camera\STM32F767ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Ov7670_camera.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\Users\Olaf\STM32CubeIDE\workspace_1.9.0\Ov7670_camera\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Ov7670_camera.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
