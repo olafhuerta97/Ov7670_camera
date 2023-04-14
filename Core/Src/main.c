@@ -110,16 +110,16 @@ int main(void)
   ov7670_config(0u);
   ov7670_startCap(OV7670_CAP_CONTINUOUS, (uint32_t)imagebuf);
   HAL_Delay(2000);
-  //ov7670_stopCap();
+  ov7670_stopCap();
   uint8_t send = 255;
   uint32_t i;
   for (i = 1; i<= (OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT *2); i+=2){
 	  tempbuf[i/2]=imagebuf[i];
   }
-  for(i=0; i < 2* OV7670_QVGA_WIDTH; i++)
-  {
+//  for(i=0; i < 2* OV7670_QVGA_WIDTH; i++)
+//  {
  // HAL_UART_Transmit(&huart3, &send, 1, 1000);
-  }
+ // }
   HAL_UART_Transmit(&huart3, tempbuf, OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT/2, 1000);
   HAL_UART_Transmit(&huart3, &tempbuf[OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT/2], OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT/2, 1000);
   //HAL_UART_Transmit(&huart3, "hola", sizeof("hola"), 1000);

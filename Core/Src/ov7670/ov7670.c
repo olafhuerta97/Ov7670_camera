@@ -113,7 +113,7 @@ void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef *hdcmi)
 {
 	f_events++;
     if (f_events == 1){
-		HAL_DCMI_Stop(sp_hdcmi);
+//		HAL_DCMI_Stop(sp_hdcmi);
 	}
 //  printf("FRAME %d\n", HAL_GetTick());
   if(s_cbVsync)s_cbVsync(s_currentV);
