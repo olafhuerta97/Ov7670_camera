@@ -27,10 +27,7 @@ static DCMI_HandleTypeDef *sp_hdcmi;
 static DMA_HandleTypeDef  *sp_hdma_dcmi;
 static I2C_HandleTypeDef  *sp_hi2c;
 static uint32_t    s_destAddressForContiuousMode;
-static void (* s_cbHsync)(uint32_t h);
-static void (* s_cbVsync)(uint32_t v);
-static uint32_t s_currentH;
-static uint32_t s_currentV;
+
 
 /*** Internal Function Declarations ***/
 static RET ov7670_write(uint8_t regAddr, uint8_t data);
@@ -55,7 +52,6 @@ RET ov7670_init(DCMI_HandleTypeDef *p_hdcmi, DMA_HandleTypeDef *p_hdma_dcmi, I2C
   uint8_t buffer[4];
   ov7670_read(0x0b, buffer);
   ov7670_read(0x01, &buffer[1]);
- // printf("[OV7670] dev id = %02X\n", buffer[0]);
 
 
   return RET_OK;
@@ -99,15 +95,10 @@ RET ov7670_startCap(uint32_t capMode, uint32_t destAddress)
 RET ov7670_stopCap()
 {
   HAL_DCMI_Stop(sp_hdcmi);
-//  HAL_Delay(30);
   return RET_OK;
 }
 
-void ov7670_registerCallback(void (*cbHsync)(uint32_t h), void (*cbVsync)(uint32_t v))
-{
-  s_cbHsync = cbHsync;
-  s_cbVsync = cbVsync;
-}
+
 
 void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef *hdcmi)
 {
@@ -115,29 +106,21 @@ void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef *hdcmi)
     if (f_events == 1){
 //		HAL_DCMI_Stop(sp_hdcmi);
 	}
-//  printf("FRAME %d\n", HAL_GetTick());
-  if(s_cbVsync)s_cbVsync(s_currentV);
+
   if(s_destAddressForContiuousMode != 0) {
-    HAL_DMA_Start_IT(hdcmi->DMA_Handle, (uint32_t)&hdcmi->Instance->DR, s_destAddressForContiuousMode, OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT /2);
+    //HAL_DMA_Start_IT(hdcmi->DMA_Handle, (uint32_t)&hdcmi->Instance->DR, s_destAddressForContiuousMode, OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT /2);
   }
-  s_currentV++;
-  s_currentH = 0;
 }
 
 void HAL_DCMI_VsyncEventCallback(DCMI_HandleTypeDef *hdcmi)
 {
 	v_events++;
-//  printf("VSYNC %d\n", HAL_GetTick());
-//  HAL_DMA_Start_IT(hdcmi->DMA_Handle, (uint32_t)&hdcmi->Instance->DR, s_destAddressForContiuousMode, OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT/2);
+
 }
 
 void HAL_DCMI_LineEventCallback(DCMI_HandleTypeDef *hdcmi)
 {
 	h_events++;
-
-////  printf("HSYNC %d\n", HAL_GetTick());
-  if(s_cbHsync)s_cbHsync(s_currentH);
-  s_currentH++;
 }
 
 /*** Internal Function Defines ***/

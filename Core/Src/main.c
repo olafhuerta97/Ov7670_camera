@@ -122,7 +122,7 @@ int main(void)
  // }
   HAL_UART_Transmit(&huart3, tempbuf, OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT/2, 1000);
   HAL_UART_Transmit(&huart3, &tempbuf[OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT/2], OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT/2, 1000);
-  //HAL_UART_Transmit(&huart3, "hola", sizeof("hola"), 1000);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
