@@ -15,7 +15,7 @@ const uint8_t OV7670_reg[][2] = {
   /* Color mode related */
 		{ 0x12, 0x10 },		// 0x14 = QVGA size, RGB mode; 0x8 = QCIF, YUV, 0xc = QCIF (RGB)
 		{ 0xc, 0x8 }, //
-		{ 0x11, 0b1000000 }, //
+		//{ 0x11, 0b1000000 }, //
 
 		{ 0xb0, 0x84 },		//Color mode (Not documented??)
 

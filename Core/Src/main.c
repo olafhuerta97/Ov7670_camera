@@ -109,7 +109,7 @@ int main(void)
   ov7670_init(&hdcmi, &hdma_dcmi, &hi2c2);
   ov7670_config(0u);
   ov7670_startCap(OV7670_CAP_CONTINUOUS, (uint32_t)imagebuf);
-  HAL_Delay(2000);
+  HAL_Delay(10000);
   ov7670_stopCap();
   uint8_t send = 255;
   uint32_t i;
