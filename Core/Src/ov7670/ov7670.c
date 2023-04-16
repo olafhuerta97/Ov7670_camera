@@ -17,7 +17,7 @@
 uint32_t h_events = 0;
 uint32_t v_events = 0;
 uint32_t f_events = 0;
-
+uint32_t frame_received=0;
 /*** Internal Const Values, Macros ***/
 
 
@@ -103,6 +103,7 @@ RET ov7670_stopCap()
 void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef *hdcmi)
 {
 	f_events++;
+	frame_received = 1;
     if (f_events == 1){
 //		HAL_DCMI_Stop(sp_hdcmi);
 	}

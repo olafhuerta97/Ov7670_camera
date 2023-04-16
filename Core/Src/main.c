@@ -22,6 +22,7 @@
 #include "dma.h"
 #include "eth.h"
 #include "i2c.h"
+#include "jpeg.h"
 #include "tim.h"
 #include "usart.h"
 #include "usb_otg.h"
@@ -49,6 +50,7 @@
 /* USER CODE BEGIN PM */
 uint8_t imagebuf[OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT *2];
 uint8_t tempbuf[OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT ];
+extern uint32_t frame_received;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -75,6 +77,9 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+int i = 0;
+uint32_t start;
+uint32_t timed;
 
   /* USER CODE END 1 */
 
@@ -103,32 +108,44 @@ int main(void)
   MX_I2C2_Init();
   MX_ETH_Init();
   MX_TIM10_Init();
+  MX_JPEG_Init();
   /* USER CODE BEGIN 2 */
 
   HAL_TIM_OC_Start(&htim10, TIM_CHANNEL_1);
   ov7670_init(&hdcmi, &hdma_dcmi, &hi2c2);
   ov7670_config(0u);
   ov7670_startCap(OV7670_CAP_CONTINUOUS, (uint32_t)imagebuf);
-  HAL_Delay(10000);
-  ov7670_stopCap();
-  uint8_t send = 255;
-  uint32_t i;
-  for (i = 1; i<= (OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT *2); i+=2){
-	  tempbuf[i/2]=imagebuf[i];
-  }
-//  for(i=0; i < 2* OV7670_QVGA_WIDTH; i++)
-//  {
- // HAL_UART_Transmit(&huart3, &send, 1, 1000);
- // }
-  HAL_UART_Transmit(&huart3, tempbuf, OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT/2, 1000);
-  HAL_UART_Transmit(&huart3, &tempbuf[OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT/2], OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT/2, 1000);
+  HAL_Delay(1000);
+  if (frame_received){
+	  start = HAL_GetTick();
+	  frame_received = 0;
+	  for (i = 1; i<= (OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT *2); i+=2){
+		  tempbuf[i/2]=imagebuf[i];
+	  }
+	  HAL_UART_Transmit(&huart3, tempbuf, OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT/2, 1000);
+	  HAL_UART_Transmit(&huart3, &tempbuf[OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT/2], OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT/2, 1000);
+	  timed = HAL_GetTick() - start;
 
+  }
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+#if 1
+	  if (frame_received){
+		  start = HAL_GetTick();
+		  frame_received = 0;
+		  for (i = 1; i<= (OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT *2); i+=2){
+			  tempbuf[i/2]=imagebuf[i];
+		  }
+		  HAL_UART_Transmit(&huart3, tempbuf, OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT/2, 1000);
+		  HAL_UART_Transmit(&huart3, &tempbuf[OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT/2], OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT/2, 1000);
+		  timed = HAL_GetTick() - start;
+
+	  }
+#endif
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
