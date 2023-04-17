@@ -10,17 +10,20 @@
 
 #define REG_BATT 0xFF
 
+#include "ov7670.h"
 
 const uint8_t OV7670_reg[][2] = {
   /* Color mode related */
+#if (OV7670_RESOLUTION == RESOLUTION_QCIF)
+		 { 0x12, 0x8 },		// 0x14 = QVGA size, RGB mode; 0x8 = QCIF, YUV, 0xc = QCIF (RGB)
+#else
 		{ 0x12, 0x10 },		// 0x14 = QVGA size, RGB mode; 0x8 = QCIF, YUV, 0xc = QCIF (RGB)
-		{ 0xc, 0x8 }, //
-		//{ 0x11, 0b1000000 }, //
-
+#endif
+		{ 0xc, 0x8 },
 		{ 0xb0, 0x84 },		//Color mode (Not documented??)
 
 		// Hardware window
-		{ 0x11, 0x01 },		//PCLK settings, 15fps
+		{ 0x11, 0x00 },		//PCLK settings, 15fps
 		{ 0x32, 0x80 },		//HREF
 		{ 0x17, 0x17 },		//HSTART
 		{ 0x18, 0x05 },		//HSTOP

@@ -48,8 +48,8 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-uint8_t imagebuf[OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT *2];
-uint8_t tempbuf[OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT ];
+uint8_t imagebuf[OV7670_WIDTH * OV7670_HEIGHT *2];
+uint8_t tempbuf[OV7670_WIDTH * OV7670_HEIGHT ];
 extern uint32_t frame_received;
 /* USER CODE END PM */
 
@@ -115,15 +115,16 @@ uint32_t timed;
   ov7670_init(&hdcmi, &hdma_dcmi, &hi2c2);
   ov7670_config(0u);
   ov7670_startCap(OV7670_CAP_CONTINUOUS, (uint32_t)imagebuf);
-  HAL_Delay(1000);
+  HAL_Delay(20000);
   if (frame_received){
 	  start = HAL_GetTick();
 	  frame_received = 0;
-	  for (i = 1; i<= (OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT *2); i+=2){
+	  for (i = 1; i<= (OV7670_WIDTH * OV7670_HEIGHT *2); i+=2){
 		  tempbuf[i/2]=imagebuf[i];
 	  }
-	  HAL_UART_Transmit(&huart3, tempbuf, OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT/2, 1000);
-	  HAL_UART_Transmit(&huart3, &tempbuf[OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT/2], OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT/2, 1000);
+	  HAL_UART_Transmit(&huart3, tempbuf, OV7670_WIDTH * OV7670_HEIGHT/2, 1000);
+	  HAL_UART_Transmit(&huart3, &tempbuf[OV7670_WIDTH * OV7670_HEIGHT/2],
+			  OV7670_WIDTH * OV7670_HEIGHT/2, 1000);
 	  timed = HAL_GetTick() - start;
 
   }
@@ -133,15 +134,16 @@ uint32_t timed;
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-#if 1
+#if 0
 	  if (frame_received){
 		  start = HAL_GetTick();
 		  frame_received = 0;
 		  for (i = 1; i<= (OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT *2); i+=2){
 			  tempbuf[i/2]=imagebuf[i];
 		  }
-		  HAL_UART_Transmit(&huart3, tempbuf, OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT/2, 1000);
-		  HAL_UART_Transmit(&huart3, &tempbuf[OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT/2], OV7670_QVGA_WIDTH * OV7670_QVGA_HEIGHT/2, 1000);
+		  HAL_UART_Transmit(&huart3, tempbuf, OV7670_WIDTH * OV7670_HEIGHT/2, 1000);
+		  HAL_UART_Transmit(&huart3, &tempbuf[OV7670_WIDTH * OV7670_HEIGHT/2],
+				  OV7670_WIDTH * OV7670_HEIGHT/2, 1000);
 		  timed = HAL_GetTick() - start;
 
 	  }
