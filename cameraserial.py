@@ -10,7 +10,8 @@ n_cols = 240 #240 h events
 data_size = n_rows * n_cols
 count = 0
 
-with serial.Serial('/dev/tty.usbmodem11103', 1000000) as ser:
+#with serial.Serial('/dev/tty.usbmodem11103', 1000000) as ser:
+with serial.Serial('COM4', 500000) as ser:
     start_time = time.monotonic()
     while True:
         data = ser.read(data_size)
